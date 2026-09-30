@@ -25,6 +25,7 @@
 │   └── wg-manager.conf
 ├── docs
 │   ├── README.md
+│   ├── _config.yml
 │   ├── comm-callgraph.md
 │   ├── gestione_permessi_uid_gid.md
 │   ├── protocol-flow.md

@@ -7,8 +7,8 @@
 - Root: `/home/main/Desktop/wg_manager`
 - Commit: `unknown`
 - Branch: `unknown`
-- Files in inventory: 92
-- Text files indexed: 72
+- Files in inventory: 93
+- Text files indexed: 73
 
 ### Working tree
 
@@ -42,6 +42,7 @@ The working tree contains uncommitted changes.
 - `config/wg-manager-realtest.conf` → [files/config/wg-manager-realtest.conf.md](files/config/wg-manager-realtest.conf.md)
 - `config/wg-manager.conf` → [files/config/wg-manager.conf.md](files/config/wg-manager.conf.md)
 - `docs/README.md` → [files/docs/README.md.md](files/docs/README.md.md)
+- `docs/_config.yml` → [files/docs/_config.yml.md](files/docs/_config.yml.md)
 - `docs/comm-callgraph.md` → [files/docs/comm-callgraph.md.md](files/docs/comm-callgraph.md.md)
 - `docs/gestione_permessi_uid_gid.md` → [files/docs/gestione_permessi_uid_gid.md.md](files/docs/gestione_permessi_uid_gid.md.md)
 - `docs/protocol-flow.md` → [files/docs/protocol-flow.md.md](files/docs/protocol-flow.md.md)
