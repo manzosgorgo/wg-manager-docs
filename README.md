@@ -20,6 +20,7 @@ Automatically generated documentation for the `wg_manager` project.
 - [wg-auth protocol](ai/wg_auth_proto.md)
 - [wg-client protocol](ai/wg_client_proto.md)
 - [wg-manager protocol](ai/wg_manager_proto.md)
+- [wg-all protocol](ai/wg_all_proto.md)
 
 ## Source documentation
 
