@@ -5,6 +5,7 @@ This file is generated automatically.
 | Directory | Files |
 |---|---:|
 | `/` | 4 |
+| `cert.old-20260930-145739` | 15 |
 | `config` | 6 |
 | `docs` | 7 |
 | `mock` | 1 |
@@ -29,6 +30,24 @@ This file is generated automatically.
 - `TODO.md`
 - `compile_commands.json`
 - `pyproject.toml`
+
+### `cert.old-20260930-145739`
+
+- `auth.crt`
+- `auth.csr`
+- `auth.ext`
+- `auth.key`
+- `ca.crt`
+- `ca.key`
+- `ca.srl`
+- `client.crt`
+- `client.csr`
+- `client.ext`
+- `client.key`
+- `server.crt`
+- `server.csr`
+- `server.ext`
+- `server.key`
 
 ### `config`
 

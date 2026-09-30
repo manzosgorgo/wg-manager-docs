@@ -5,7 +5,7 @@
 - Path: `src/wg_client/wg_client_config.py`
 - Language: `python`
 - Lines: 147
-- SHA256: `5f4a1f6f270e16a13a9376dd5eac3d1697aee5fa4919aa7fecc119d461474317`
+- SHA256: `a19e5b610c5a3e9ffaa09d05a53f1e435b66dca160b46b94f11eb0bbb852a845`
 - Imports:
   - `configparser`
   - `os`
@@ -19,7 +19,7 @@ import configparser
 import os
 
 
-DEFAULT_CONFIG = "/etc/wg-manager/wg-client.conf"
+DEFAULT_CONFIG = "/home/main/Desktop/wg_manager/config/wg-client-test-auth.conf"
 
 # Secure Session defaults
 DEFAULT_SECURE_SESSION_ENABLED = True

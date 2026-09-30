@@ -342,13 +342,13 @@ Structural symbol index extracted mechanically from source files.
 - **function** `def expect_error(func, status, message)` — line 25
 - **variable** `DEFAULT_SOCKET` — line 36
 - **function** `def activation_params()` — line 38
-- **function** `def client(activation_params)` — line 53
-- **function** `def peer_data()` — line 73
-- **function** `def test_params(client, peer_data, activation_params)` — line 86
-- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 107
-- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 134
-- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 195
-- **function** `def test_authenticated_status(activation_params, client)` — line 220
+- **function** `def client(activation_params)` — line 57
+- **function** `def peer_data()` — line 77
+- **function** `def test_params(client, peer_data, activation_params)` — line 90
+- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 109
+- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 136
+- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 197
+- **function** `def test_authenticated_status(activation_params, client)` — line 222
 
 ## `tests/client/test_client.py`
 

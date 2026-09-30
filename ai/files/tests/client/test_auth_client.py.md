@@ -4,8 +4,8 @@
 
 - Path: `tests/client/test_auth_client.py`
 - Language: `python`
-- Lines: 225
-- SHA256: `05a8b2a4f7cca5e29508c391de2bc6250ba9affdb715bc144595726926d3d841`
+- Lines: 227
+- SHA256: `909d546a1e84885fd5de60a91b6c1425aa6ce8e8487f2d669eaa337f951ea0db`
 - Imports:
   - `base64`
   - `ipaddress`
@@ -62,6 +62,10 @@ def activation_params():
     return {
         "socket_path": DEFAULT_SOCKET,
         "k_sess": (
+            "b7e4a2c91f6d0835"
+            "9a31c7e4b25f608d"
+            "4c8e1a73f0b692de"
+            "5a17c3f84e29b601"
             "b7e4a2c91f6d0835"
             "9a31c7e4b25f608d"
             "4c8e1a73f0b692de"
@@ -123,8 +127,6 @@ def test_params(client, peer_data,activation_params):
         for i in ips_obj:
             assert i.ip in vpn_network
             assert i.network.prefixlen == 32
-
-
 
 
 def test_remove_peer(client: WGClientClient, peer_data,activation_params):

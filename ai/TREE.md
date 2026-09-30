@@ -1,5 +1,21 @@
 # Project Tree
 
+├── cert.old-20260930-145739
+│   ├── auth.crt
+│   ├── auth.csr
+│   ├── auth.ext
+│   ├── auth.key
+│   ├── ca.crt
+│   ├── ca.key
+│   ├── ca.srl
+│   ├── client.crt
+│   ├── client.csr
+│   ├── client.ext
+│   ├── client.key
+│   ├── server.crt
+│   ├── server.csr
+│   ├── server.ext
+│   └── server.key
 ├── config
 │   ├── wg-auth.conf
 │   ├── wg-client-test-auth.conf

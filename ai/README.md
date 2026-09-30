@@ -7,7 +7,7 @@
 - Root: `/home/main/Desktop/wg_manager`
 - Commit: `unknown`
 - Branch: `unknown`
-- Files in inventory: 77
+- Files in inventory: 92
 - Text files indexed: 72
 
 ### Working tree
