@@ -5,7 +5,7 @@
 - Path: `src/wg_manager/wg_manager.py`
 - Language: `python`
 - Lines: 231
-- SHA256: `f338a584b8592a8e02b0c958b6fdd10121ca311316e36f3a32b1a61acabda3da`
+- SHA256: `db21f0273fc91786a24abe447a6f6f578f287cde044062487d3340302d15319a`
 - Imports:
   - `base64`
   - `configparser`
@@ -157,7 +157,7 @@ def add(c, o):
     for p in peers(c["if"]):
         if p["public_key"] == pk:
             raise E(409, "peer already exists")
-        if ip in p["allowed_ips"]:
+        if str(ip) in p["allowed_ips"]:
             raise E(409, "allowed_ip already in use")
     wg(["set", c["if"], "peer", pk, "allowed-ips", ip])
     return {"ok": True, "operation": "add_peer", "public_key": pk, "allowed_ip": ip}

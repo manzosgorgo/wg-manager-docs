@@ -4,8 +4,8 @@
 
 - Path: `config/wg-client-test-auth.conf`
 - Language: `unknown`
-- Lines: 33
-- SHA256: `6d3474a9e58ad00a7b8159e7257d53562ab859190a52f48d11658d42979045c0`
+- Lines: 34
+- SHA256: `63a1c293cb88c7e5a846e749e9e3b5a01a7382791e4c812a5850afcbe597c484`
 
 ## Source
 
@@ -13,6 +13,7 @@
 [client]
 name = wg-client
 log_level = DEBUG
+
 
 
 [api]
@@ -36,11 +37,11 @@ timeout = 10
 interface = wg0
 
 [secure_session]
-enabled = true
+enabled = false
 
 session_id_size = 16
 nonce_size = 32
-session_key_size = 64
+session_key_size = 32
 counter_min = 1
 counter_max = 4294967295
 ```

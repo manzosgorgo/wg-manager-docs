@@ -4,11 +4,12 @@
 
 - Path: `tests/client/test_auth_client.py`
 - Language: `python`
-- Lines: 227
-- SHA256: `909d546a1e84885fd5de60a91b6c1425aa6ce8e8487f2d669eaa337f951ea0db`
+- Lines: 249
+- SHA256: `d29397d991094e2edcf842eb36e3ac6bd40cb1ecef7d12f0d458e1046de621f8`
 - Imports:
   - `base64`
   - `ipaddress`
+  - `pathlib`
   - `pytest`
   - `src.wg_client`
   - `src.wg_client.wg_client_activator`
@@ -35,8 +36,34 @@ from src.wg_client.wg_client_activator import activate_client
 from src.wg_client.wg_controller_client import WGClientClient
 from src.wg_client.wg_client_errors import WGControllerError
 from src.wg_client.wg_secure_session import WGSecureSession
+from pathlib import Path
+
+CLIENT_CONFIG = Path("../../config/wg-client-test-auth.conf")
 
 
+def set_secure_session(enabled: bool):
+    text = CLIENT_CONFIG.read_text()
+
+    old = "enabled = true" if not enabled else "enabled = false"
+    new = "enabled = true" if enabled else "enabled = false"
+
+    if old not in text:
+        return
+
+    CLIENT_CONFIG.write_text(text.replace(old, new, 1))
+
+
+@pytest.fixture
+def secure_session_config():
+    original = CLIENT_CONFIG.read_text()
+
+    yield
+
+    CLIENT_CONFIG.write_text(original)
+
+@pytest.fixture(autouse=True)
+def configure_client():
+    set_secure_session(True)
 def make_key(value):
     """
     Genera una public key WireGuard fittizia ma sintatticamente valida.
@@ -66,10 +93,6 @@ def activation_params():
             "9a31c7e4b25f608d"
             "4c8e1a73f0b692de"
             "5a17c3f84e29b601"
-            "b7e4a2c91f6d0835"
-            "9a31c7e4b25f608d"
-            "4c8e1a73f0b692de"
-            "5a17c3f84e29b601"
         ),
         "timeout": 30,
         "client_id": "pytest-client",
@@ -90,9 +113,9 @@ def client(activation_params):
     return WGClientClient(
         host="127.0.0.1",
         port=9444,
-        ca=str("cert/ca.crt"),
-        cert=str("cert/client.crt"),
-        key=str("cert/client.key"),
+        ca=str("../../cert/ca.crt"),
+        cert=str("../../cert/client.crt"),
+        key=str("../../cert/client.key"),
         listen_path="/api/7f3a91c2e8b44d17/9c71e4a2f6b83d10",
         secure_session=session,
     )

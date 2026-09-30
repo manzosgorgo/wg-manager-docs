@@ -186,6 +186,7 @@ This file is generated automatically.
 
 - `base64`
 - `ipaddress`
+- `pathlib`
 - `pytest`
 - `src.wg_client`
 - `src.wg_client.wg_client_activator`
@@ -199,6 +200,7 @@ This file is generated automatically.
 
 - `base64`
 - `ipaddress`
+- `pathlib`
 - `pytest`
 - `src.wg_client`
 - `src.wg_client.wg_client_activator`

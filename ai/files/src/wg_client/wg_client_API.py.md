@@ -4,8 +4,8 @@
 
 - Path: `src/wg_client/wg_client_API.py`
 - Language: `python`
-- Lines: 133
-- SHA256: `32f42e51327b906f2fe5f69c910f1eab95a179fc680a32914980dda0c596c87f`
+- Lines: 142
+- SHA256: `8fe1c5b92200cee3cdabf6ecbe5518e4a567b898f3431a37cc03125a8448a3f9`
 - Imports:
   - `logging`
   - `src.wg_client.wg_client_API_handler`
@@ -29,6 +29,7 @@ from src.wg_client.wg_controller_client import WGControllerClient
 
 
 log = logging.getLogger("wg_manager.api")
+log.setLevel(logging.DEBUG)
 
 
 class WGClientAPI:
@@ -36,11 +37,17 @@ class WGClientAPI:
         self.server = None
         log.debug("Initializing WGClientAPI")
 
+        log.debug("host")
         self.host = config["api"]["host"]
+        log.debug("port")
         self.port = config["api"]["port"]
+        log.debug("cert")
         self.certfile = config["api"]["server_cert"]
+        log.debug("key")
         self.keyfile = config["api"]["server_key"]
+        log.debug("ca")
         self.cafile = config["api"]["ca"]
+        log.debug("interface")
         self.interface = config["wireguard"]["interface"]
 
         # Every endpoint lives below listen_path, e.g.
@@ -59,8 +66,10 @@ class WGClientAPI:
             raise RuntimeError(
                 "lifecycle is already associated with another WGClientAPI"
             )
-
+        log.debug("lifrcycle")
         self.lifecycle = lifecycle
+
+        log.debug("ControllerClient")
         self.controller = WGControllerClient(
             config["controller"]["host"],
             config["controller"]["port"],

@@ -89,18 +89,18 @@ Structural symbol index extracted mechanically from source files.
 - **function** `def setup_logging()` — line 27
 - **function** `def systemd_notify(message)` — line 36
 - **function** `def activate(ipc, lifecycle)` — line 55
-- **function** `def main()` — line 125
+- **function** `def main()` — line 126
 
 ## `src/wg_client/wg_client_API.py`
 
 - **variable** `log` — line 12
-- **class** `WGClientAPI` — line 15
-  - **method** `def __init__(self, config, listen_path, session = None, lifecycle = None)` — line 16
-  - **method** `def start(self)` — line 54
-  - **method** `def bind(self)` — line 59
-  - **method** `def serve(self)` — line 100
-  - **method** `def stop(self)` — line 113
-  - **method** `def close(self)` — line 127
+- **class** `WGClientAPI` — line 16
+  - **method** `def __init__(self, config, listen_path, session = None, lifecycle = None)` — line 17
+  - **method** `def start(self)` — line 63
+  - **method** `def bind(self)` — line 68
+  - **method** `def serve(self)` — line 109
+  - **method** `def stop(self)` — line 122
+  - **method** `def close(self)` — line 136
 
 ## `src/wg_client/wg_client_API_handler.py`
 
@@ -338,31 +338,40 @@ Structural symbol index extracted mechanically from source files.
 
 ## `tests/client/test_auth_client.py`
 
-- **function** `def make_key(value)` — line 17
-- **function** `def expect_error(func, status, message)` — line 25
-- **variable** `DEFAULT_SOCKET` — line 36
-- **function** `def activation_params()` — line 38
-- **function** `def client(activation_params)` — line 57
-- **function** `def peer_data()` — line 77
-- **function** `def test_params(client, peer_data, activation_params)` — line 90
-- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 109
-- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 136
-- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 197
-- **function** `def test_authenticated_status(activation_params, client)` — line 222
+- **variable** `CLIENT_CONFIG` — line 17
+- **function** `def set_secure_session(enabled: bool)` — line 20
+- **function** `def secure_session_config()` — line 33
+- **function** `def configure_client()` — line 41
+- **function** `def make_key(value)` — line 43
+- **function** `def expect_error(func, status, message)` — line 51
+- **variable** `DEFAULT_SOCKET` — line 62
+- **function** `def activation_params()` — line 64
+- **function** `def client(activation_params)` — line 79
+- **function** `def peer_data()` — line 99
+- **function** `def test_params(client, peer_data, activation_params)` — line 112
+- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 131
+- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 158
+- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 219
+- **function** `def test_authenticated_status(activation_params, client)` — line 244
 
 ## `tests/client/test_client.py`
 
-- **function** `def make_key(value)` — line 17
-- **function** `def expect_error(func, status, message)` — line 25
-- **variable** `DEFAULT_SOCKET` — line 36
-- **function** `def activation_params()` — line 38
-- **function** `def client()` — line 53
-- **function** `def peer_data()` — line 63
-- **function** `def test_params(client, peer_data, activation_params)` — line 76
-- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 96
-- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 123
-- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 184
-- **function** `def test_status(client: WGClientClient, activation_params) -> Any | None` — line 209
+- **variable** `CLIENT_CONFIG` — line 20
+- **function** `def set_secure_session(enabled: bool)` — line 23
+- **function** `def secure_session_config()` — line 35
+- **function** `def configure_client()` — line 43
+- **function** `def configure_client()` — line 48
+- **function** `def make_key(value)` — line 51
+- **function** `def expect_error(func, status, message)` — line 59
+- **variable** `DEFAULT_SOCKET` — line 70
+- **function** `def activation_params()` — line 72
+- **function** `def client()` — line 87
+- **function** `def peer_data()` — line 97
+- **function** `def test_params(client, peer_data, activation_params)` — line 110
+- **function** `def test_remove_peer(client: WGClientClient, peer_data, activation_params)` — line 129
+- **function** `def test_add_peer_errors(client: WGClientClient, peer_data, activation_params)` — line 156
+- **function** `def test_add_peer_and_verify(client: WGClientClient, peer_data, activation_params)` — line 217
+- **function** `def test_status(client: WGClientClient, activation_params) -> Any | None` — line 242
 
 ## `tests/client/test_client_API.py`
 

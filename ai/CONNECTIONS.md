@@ -120,7 +120,7 @@ Generated mechanically by `tools/project_index.py`.
 - `main`
 
 **Evidence:**
-- `src/wg_client/wg_client.py:131` SOCKET_CREATE `socket.socket(socket.AF_UNIX, socket.SOCK_STREAM, fileno=os.dup(sys.stdin.fileno()))`
+- `src/wg_client/wg_client.py:132` SOCKET_CREATE `socket.socket(socket.AF_UNIX, socket.SOCK_STREAM, fileno=os.dup(sys.stdin.fileno()))`
 
 ### connection-005
 

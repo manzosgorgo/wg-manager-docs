@@ -4,8 +4,8 @@
 
 - Path: `src/wg_client/wg_client.py`
 - Language: `python`
-- Lines: 196
-- SHA256: `0627d56d34e55d5e2219f6eda1de48a656c3a18cec5ba17885bd6474d4dae2e2`
+- Lines: 197
+- SHA256: `fa1f3e8099819715eb12d7737d305aae35919c5e92fbf32136acd858d22c9a60`
 - Imports:
   - `logging`
   - `os`
@@ -91,7 +91,7 @@ def activate(ipc, lifecycle):
     api = None
 
     try:
-        log.debug("waiting for activation packet")
+        log.debug("activate waiting for activation packet")
 
         packet = ipc.receive_packet()
 
@@ -120,10 +120,11 @@ def activate(ipc, lifecycle):
             log.info("wg_client not using secure session")
             api = WGClientAPI(cfg, activation["listen_path"], None,lifecycle)
 
+        log.debug("api bind")
         api.bind()
 
     except (WGError, RuntimeError, OSError) as exc:
-        log.error("activation failed: %s", exc)
+        log.exception("activation failed")
 
         if api is not None:
             api.close()

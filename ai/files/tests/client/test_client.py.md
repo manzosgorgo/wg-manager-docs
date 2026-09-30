@@ -4,11 +4,12 @@
 
 - Path: `tests/client/test_client.py`
 - Language: `python`
-- Lines: 214
-- SHA256: `214ea7372dc887738c0ebb4af8656190d9ccf9abc0d8409273c07e249e058b97`
+- Lines: 247
+- SHA256: `be937e2f03f7d532770fa02662c15509cebb75b3c5443ce03646ee3747aae0d7`
 - Imports:
   - `base64`
   - `ipaddress`
+  - `pathlib`
   - `pytest`
   - `src.wg_client`
   - `src.wg_client.wg_client_activator`
@@ -36,6 +37,40 @@ from src.wg_client.wg_controller_client import WGClientClient
 from src.wg_client.wg_client_errors import WGControllerError
 from src.wg_client.wg_secure_session import WGSecureSession
 
+
+from pathlib import Path
+
+
+CLIENT_CONFIG = Path("../../config/wg-client-test-auth.conf")
+
+
+def set_secure_session(enabled: bool):
+    text = CLIENT_CONFIG.read_text()
+
+    old = "enabled = true" if not enabled else "enabled = false"
+    new = "enabled = true" if enabled else "enabled = false"
+
+    if old not in text:
+        return
+    CLIENT_CONFIG.write_text(text.replace(old, new, 1))
+
+
+@pytest.fixture
+def secure_session_config():
+    original = CLIENT_CONFIG.read_text()
+
+    yield
+
+    CLIENT_CONFIG.write_text(original)
+
+@pytest.fixture(autouse=True)
+def configure_client():
+    set_secure_session(False)
+
+
+@pytest.fixture(autouse=True)
+def configure_client():
+    set_secure_session(False)
 
 def make_key(value):
     """
@@ -77,9 +112,9 @@ def client():
     return WGClientClient(
         host="127.0.0.1",
         port=9444,
-        ca="cert/ca.crt",
-        cert="cert/client.crt",
-        key="cert/client.key",
+        ca="../../cert/ca.crt",
+        cert="../../cert/client.crt",
+        key="../../cert/client.key",
         listen_path="/api/7f3a91c2e8b44d17/9c71e4a2f6b83d10",
     )
 @pytest.fixture
@@ -113,7 +148,6 @@ def test_params(client, peer_data,activation_params):
         for i in ips_obj:
             assert i.ip in vpn_network
             assert i.network.prefixlen == 32
-
 
 
 def test_remove_peer(client: WGClientClient, peer_data,activation_params):

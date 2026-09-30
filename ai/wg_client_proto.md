@@ -70,7 +70,7 @@
 
 ## Sink
 
-### `wg_client.py:main` — socket.<create socket.socket>@L131
+### `wg_client.py:main` — socket.<create socket.socket>@L132
 - via: os.dup, sys.stdin.fileno
 - esterni: socket.AF_UNIX, socket.SOCK_STREAM, sys.stdin
 
