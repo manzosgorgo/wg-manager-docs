@@ -4,8 +4,8 @@
 
 - Path: `docs/README.md`
 - Language: `markdown`
-- Lines: 38
-- SHA256: `b1cc39d11c7d857e17abe54de1ba4ffaf6bf44f0760a53d2283bc49e7e2d73ca`
+- Lines: 39
+- SHA256: `3c30f36c2d66d90ca80cc057dd3736a03f93b90979397080ec0004b2267054cc`
 
 ## Source
 
@@ -32,6 +32,7 @@ Automatically generated documentation for the `wg_manager` project.
 - [wg-auth protocol](ai/wg_auth_proto.md)
 - [wg-client protocol](ai/wg_client_proto.md)
 - [wg-manager protocol](ai/wg_manager_proto.md)
+- [wg-all protocol](ai/wg_all_proto.md)
 
 ## Source documentation
 
