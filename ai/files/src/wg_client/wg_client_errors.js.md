@@ -1,11 +1,11 @@
-# `src/wg_frontend/wg_client_errors.js`
+# `src/wg_client/wg_client_errors.js`
 
 ## Metadata
 
-- Path: `src/wg_frontend/wg_client_errors.js`
+- Path: `src/wg_client/wg_client_errors.js`
 - Language: `javascript`
-- Lines: 122
-- SHA256: `1c74a74ac903af9706bd52bcc9362dd1758f2f0d7cc6978904286a2f3952c9f2`
+- Lines: 107
+- SHA256: `571abcf5ac75fdd9662a8a98e2ddeae8207cbed1d740914c224d63c99b76aa4a`
 
 ## Source
 
@@ -35,14 +35,7 @@ export class WGError extends Error {
   }
 }
 
-export class WGClientError extends WGError {
-  constructor(message) {
-    super(message);
-    this.name = "WGClientError";
-  }
-}
-
-export class WGProtocolError extends WGClientError {
+export class WGProtocolError extends WGError {
   constructor(message) {
     super(message);
     this.name = "WGProtocolError";
@@ -84,7 +77,7 @@ export class WGCounterExhaustedError extends WGCounterError {
   }
 }
 
-export class WGAuthenticationError extends WGClientError {
+export class WGAuthenticationError extends WGError {
   constructor(message) {
     super(message);
     this.name = "WGAuthenticationError";
@@ -105,31 +98,23 @@ export class WGSessionMismatchError extends WGAuthenticationError {
   }
 }
 
-export class WGSessionError extends WGClientError {
+export class WGReplayError extends WGError {
   constructor(message) {
     super(message);
-    this.name = "WGSessionError";
+    this.name = "WGReplayError";
   }
 }
-
-export class WGSessionExpiredError extends WGSessionError {
+export class WGSessionExpiredError extends WGError {
   constructor(message) {
     super(message);
     this.name = "WGSessionExpiredError";
   }
 }
 
-export class WGRequestRateExceededError extends WGSessionError {
+export class WGRequestRateExceededError extends WGError {
   constructor(message) {
     super(message);
     this.name = "WGRequestRateExceededError";
-  }
-}
-
-export class WGReplayError extends WGProtocolError {
-  constructor(message) {
-    super(message);
-    this.name = "WGReplayError";
   }
 }
 ```

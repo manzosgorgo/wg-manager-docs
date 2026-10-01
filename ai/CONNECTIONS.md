@@ -223,8 +223,8 @@ Generated mechanically by `tools/project_index.py`.
 - `send`
 
 **Evidence:**
-- `tests/client/test_secure_session_concurrency.py:122` HTTP_CLIENT `http.client.HTTPConnection('127.0.0.1', port, timeout=5)`
-- `tests/client/test_secure_session_concurrency.py:129` CLOSE `conn.close()`
+- `tests/client/test_secure_session_concurrency.py:120` HTTP_CLIENT `http.client.HTTPConnection('127.0.0.1', port, timeout=5)`
+- `tests/client/test_secure_session_concurrency.py:127` CLOSE `conn.close()`
 
 ### connection-009
 

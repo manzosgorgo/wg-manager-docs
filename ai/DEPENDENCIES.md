@@ -106,6 +106,7 @@ This file is generated automatically.
 ## `src/wg_client/wg_client_config.py`
 
 - `configparser`
+- `math`
 - `os`
 
 ## `src/wg_client/wg_client_lifecycle.py`
@@ -132,9 +133,11 @@ This file is generated automatically.
 - `hashlib`
 - `hmac`
 - `logging`
+- `math`
 - `secrets`
 - `src.wg_client.wg_client_errors`
 - `threading`
+- `time`
 
 ## `src/wg_frontend/check_vectors.mjs`
 
@@ -235,6 +238,12 @@ This file is generated automatically.
 - `src.wg_client.wg_secure_session`
 - `threading`
 
+## `tests/client/test_secure_session_policy.py`
+
+- `pytest`
+- `src.wg_client.wg_client_errors`
+- `src.wg_client.wg_secure_session`
+
 ## `tests/client/test_secure_session_threadsefety.py`
 
 - `concurrent.futures`
@@ -306,3 +315,12 @@ This file is generated automatically.
 - `socket`
 - `ssl`
 - `tests.client.test_wg_handler`
+
+## `tests/test_mock.py`
+
+- `base64`
+- `os`
+- `pathlib`
+- `pytest`
+- `subprocess`
+- `sys`
