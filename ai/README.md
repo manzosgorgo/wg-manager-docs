@@ -5,7 +5,7 @@
 ## Repository
 
 - Root: `/home/main/Desktop/wg_manager`
-- Commit: `7fa1a0b55f566e91e5c12bfb8b98b773fec285eb`
+- Commit: `859d9159a15c1f8a271b68c89da0886ca5bb876a`
 - Branch: `protocol-review`
 - Files in inventory: 99
 - Text files indexed: 79
