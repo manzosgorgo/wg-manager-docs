@@ -97,11 +97,14 @@
 │   │   ├── test_client.py
 │   │   ├── test_client_API.py
 │   │   ├── test_secure_session.py
+│   │   ├── test_secure_session_concurrency.py
+│   │   ├── test_secure_session_threadsefety.py
 │   │   ├── test_wg_client_activator.py
 │   │   └── test_wg_client_integration.py
 │   ├── frontend
 │   │   ├── __init__.py
 │   │   ├── test_cross_language_vector.py
+│   │   ├── test_secure_session_concurrency.test.mjs
 │   │   └── wg_secure_session_gen_vectors.py
 │   ├── __init__.py
 │   └── test_http_handler.py

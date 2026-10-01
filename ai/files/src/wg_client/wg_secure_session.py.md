@@ -4,8 +4,8 @@
 
 - Path: `src/wg_client/wg_secure_session.py`
 - Language: `python`
-- Lines: 555
-- SHA256: `063b02203fd1d897ff55dd73804585aba2aa55d5aeca3246f24fc7a878d7246c`
+- Lines: 621
+- SHA256: `b929ee3df413afca9cc712e9b20b310a02e50257968a7f1221006457b35f3de7`
 - Imports:
   - `base64`
   - `binascii`
@@ -16,6 +16,7 @@
   - `logging`
   - `secrets`
   - `src.wg_client.wg_client_errors`
+  - `threading`
 
 ## Source
 
@@ -28,6 +29,7 @@ import hashlib
 import hmac
 import logging
 import secrets
+import threading
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -126,6 +128,10 @@ class WGSecureSession:
         self._request_counter = self.counter_min - 1
         self._last_response_counter = self.counter_min - 1
         self._rng = rng or secrets.token_bytes
+
+        # Protects both counters: reading, checking and advancing them
+        # must be one atomic step when the instance is shared by threads.
+        self._lock = threading.Lock()
     # ------------------------------------------------------------------
     # Public session information
     # ------------------------------------------------------------------
@@ -167,6 +173,20 @@ class WGSecureSession:
     # ------------------------------------------------------------------
 
     def create_request_auth(
+        self,
+        method: str,
+        path: str,
+        body: bytes = b"",
+    ) -> dict:
+        """
+        Create authentication parameters for a new request.
+
+        Thread-safe: concurrent callers never obtain the same counter.
+        """
+        with self._lock:
+            return self._create_request_auth_unlocked(method, path, body)
+
+    def _create_request_auth_unlocked(
         self,
         method: str,
         path: str,
@@ -224,6 +244,20 @@ class WGSecureSession:
     # ------------------------------------------------------------------
 
     def create_response_auth(
+        self,
+        request_auth: dict,
+        status: int,
+        body: bytes = b"",
+    ) -> dict:
+        """
+        Create authentication parameters for a response.
+        """
+        with self._lock:
+            return self._create_response_auth_unlocked(
+                request_auth, status, body
+            )
+
+    def _create_response_auth_unlocked(
         self,
         request_auth: dict,
         status: int,
@@ -291,6 +325,22 @@ class WGSecureSession:
         """
         Verify request authentication.
 
+        Thread-safe: the replay check and the counter update are one
+        atomic step, so a request is accepted at most once.
+        """
+        with self._lock:
+            return self._verify_request_unlocked(auth, method, path, body)
+
+    def _verify_request_unlocked(
+        self,
+        auth: dict,
+        method: str,
+        path: str,
+        body: bytes = b"",
+    ) -> bool:
+        """
+        Verify request authentication.
+
         The request counter must be strictly greater than the
         last accepted request counter.
         """
@@ -349,6 +399,23 @@ class WGSecureSession:
         return True
 
     def verify_response(
+        self,
+        auth: dict,
+        request_auth: dict,
+        status: int,
+        body: bytes = b"",
+    ) -> bool:
+        """
+        Verify authentication of a server response.
+
+        Thread-safe: a response is accepted at most once.
+        """
+        with self._lock:
+            return self._verify_response_unlocked(
+                auth, request_auth, status, body
+            )
+
+    def _verify_response_unlocked(
         self,
         auth: dict,
         request_auth: dict,

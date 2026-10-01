@@ -19,8 +19,8 @@ This file is generated automatically.
 | `tests` | 2 |
 | `tests/auth` | 4 |
 | `tests/auth/js` | 6 |
-| `tests/client` | 7 |
-| `tests/frontend` | 3 |
+| `tests/client` | 9 |
+| `tests/frontend` | 4 |
 
 ## Contents
 
@@ -159,6 +159,8 @@ This file is generated automatically.
 - `test_client.py`
 - `test_client_API.py`
 - `test_secure_session.py`
+- `test_secure_session_concurrency.py`
+- `test_secure_session_threadsefety.py`
 - `test_wg_client_activator.py`
 - `test_wg_client_integration.py`
 
@@ -166,4 +168,5 @@ This file is generated automatically.
 
 - `__init__.py`
 - `test_cross_language_vector.py`
+- `test_secure_session_concurrency.test.mjs`
 - `wg_secure_session_gen_vectors.py`

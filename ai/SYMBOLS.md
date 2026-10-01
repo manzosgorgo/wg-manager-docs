@@ -223,28 +223,32 @@ Structural symbol index extracted mechanically from source files.
 
 ## `src/wg_client/wg_secure_session.py`
 
-- **variable** `log` — line 24
-- **class** `WGSecureSession` — line 27
-  - **method** `def __init__(self, config, k_session: bytes, session_id: bytes | None = None, rng = None)` — line 47
-  - **method** `def session_id(self) -> bytes` — line 112
-  - **method** `def session_id_b64(self) -> str` — line 117
-  - **method** `def _derive_session_seed(self) -> bytes` — line 125
-  - **method** `def _derive_key(self, purpose: bytes) -> bytes` — line 134
-  - **method** `def create_request_auth(self, method: str, path: str, body: bytes = b'') -> dict` — line 147
-  - **method** `def create_response_auth(self, request_auth: dict, status: int, body: bytes = b'') -> dict` — line 204
-  - **method** `def verify_request(self, auth: dict, method: str, path: str, body: bytes = b'') -> bool` — line 262
-  - **method** `def verify_response(self, auth: dict, request_auth: dict, status: int, body: bytes = b'') -> bool` — line 329
-  - **method** `def _validate_auth_structure(auth: dict, required_fields: tuple) -> None` — line 406
-  - **method** `def _validate_session_id(self, value) -> bytes` — line 416
-  - **method** `def _validate_counter(self, value) -> int` — line 426
-  - **method** `def _validate_nonce(self, value) -> bytes` — line 435
-  - **method** `def _validate_mac(self, value) -> bytes` — line 445
-  - **method** `def _validate_request_auth(self, auth: dict) -> dict` — line 455
-  - **method** `def _validate_response_auth(self, auth: dict) -> dict` — line 469
-  - **method** `def _request_message(self, counter: int, nonce: bytes, method: str, path: str, body: bytes) -> bytes` — line 492
-  - **method** `def _response_message(self, counter: int, nonce: bytes, status: int, body: bytes) -> bytes` — line 515
-  - **method** `def _b64(value: bytes) -> str` — line 541
-  - **method** `def _unb64(value: str) -> bytes` — line 546
+- **variable** `log` — line 25
+- **class** `WGSecureSession` — line 28
+  - **method** `def __init__(self, config, k_session: bytes, session_id: bytes | None = None, rng = None)` — line 48
+  - **method** `def session_id(self) -> bytes` — line 117
+  - **method** `def session_id_b64(self) -> str` — line 122
+  - **method** `def _derive_session_seed(self) -> bytes` — line 130
+  - **method** `def _derive_key(self, purpose: bytes) -> bytes` — line 139
+  - **method** `def create_request_auth(self, method: str, path: str, body: bytes = b'') -> dict` — line 152
+  - **method** `def _create_request_auth_unlocked(self, method: str, path: str, body: bytes = b'') -> dict` — line 166
+  - **method** `def create_response_auth(self, request_auth: dict, status: int, body: bytes = b'') -> dict` — line 223
+  - **method** `def _create_response_auth_unlocked(self, request_auth: dict, status: int, body: bytes = b'') -> dict` — line 237
+  - **method** `def verify_request(self, auth: dict, method: str, path: str, body: bytes = b'') -> bool` — line 295
+  - **method** `def _verify_request_unlocked(self, auth: dict, method: str, path: str, body: bytes = b'') -> bool` — line 311
+  - **method** `def verify_response(self, auth: dict, request_auth: dict, status: int, body: bytes = b'') -> bool` — line 378
+  - **method** `def _verify_response_unlocked(self, auth: dict, request_auth: dict, status: int, body: bytes = b'') -> bool` — line 395
+  - **method** `def _validate_auth_structure(auth: dict, required_fields: tuple) -> None` — line 472
+  - **method** `def _validate_session_id(self, value) -> bytes` — line 482
+  - **method** `def _validate_counter(self, value) -> int` — line 492
+  - **method** `def _validate_nonce(self, value) -> bytes` — line 501
+  - **method** `def _validate_mac(self, value) -> bytes` — line 511
+  - **method** `def _validate_request_auth(self, auth: dict) -> dict` — line 521
+  - **method** `def _validate_response_auth(self, auth: dict) -> dict` — line 535
+  - **method** `def _request_message(self, counter: int, nonce: bytes, method: str, path: str, body: bytes) -> bytes` — line 558
+  - **method** `def _response_message(self, counter: int, nonce: bytes, status: int, body: bytes) -> bytes` — line 581
+  - **method** `def _b64(value: bytes) -> str` — line 607
+  - **method** `def _unb64(value: str) -> bytes` — line 612
 
 ## `src/wg_frontend/check_vectors.mjs`
 
@@ -280,7 +284,7 @@ Structural symbol index extracted mechanically from source files.
 - **function** `b64decode` — line 113
 - **function** `sha256` — line 134
 - **class** `WGSecureSession` — line 150
-- **function** `bytesEqual` — line 545
+- **function** `bytesEqual` — line 566
 
 ## `src/wg_manager/wg_manager.py`
 
@@ -418,6 +422,49 @@ Structural symbol index extracted mechanically from source files.
 - **function** `def test_response_body_tampering()` — line 618
 - **function** `def test_request_counter_exhaustion()` — line 635
 
+## `tests/client/test_secure_session_concurrency.py`
+
+- **variable** `CFG` — line 40
+- **variable** `K_SESSION` — line 49
+- **variable** `SESSION_ID` — line 50
+- **variable** `LISTEN_PATH` — line 51
+- **variable** `INTERFACE` — line 52
+- **class** `FakeController` — line 55
+  - **method** `def status(self)` — line 56
+  - **method** `def add_peer(self, public_key, allowed_ip)` — line 59
+  - **method** `def remove_peer(self, public_key)` — line 62
+- **function** `def start_server()` — line 66
+- **function** `def stop_server(srv)` — line 81
+- **function** `def server()` — line 87
+- **function** `def new_sender()` — line 93
+- **function** `def sign(sender, method = 'GET', path = '/v1/status', body = b'')` — line 98
+- **variable** `SIGN_LOCK` — line 102
+- **function** `def sign_serialized(sender, method = 'GET', path = '/v1/status', body = b'')` — line 105
+- **function** `def send(srv, auth, method = 'GET', path = '/v1/status', body = b'')` — line 111
+- **function** `def test_sequential_requests_all_succeed(server)` — line 136
+- **function** `def test_lost_request_does_not_desync(server)` — line 146
+- **function** `def test_same_signed_request_sent_concurrently_accepted_once(server, round_)` — line 153
+- **function** `def test_retry_with_same_counter_after_lost_response_is_rejected(server)` — line 168
+- **function** `def test_python_sender_counters_unique_under_threads()` — line 177
+- **function** `def test_reordered_pair_rejects_the_older_request(server)` — line 190
+- **function** `def test_reordered_pair_both_accepted_with_window(server)` — line 200
+- **function** `def run_parallel(server, signer, n = 64, workers = 16)` — line 208
+- **function** `def test_concurrent_requests_report()` — line 214
+- **function** `def test_concurrent_requests_all_succeed_serialized_signing(server)` — line 232
+- **function** `def test_concurrent_requests_all_succeed_unsynchronized_signing(server)` — line 238
+
+## `tests/client/test_secure_session_threadsefety.py`
+
+- **variable** `CFG` — line 22
+- **variable** `K_SESSION` — line 31
+- **variable** `SESSION_ID` — line 32
+- **function** `def new()` — line 35
+- **function** `def run_threads(n, target)` — line 39
+- **function** `def test_sender_counters_unique_and_contiguous_under_threads()` — line 55
+- **function** `def test_concurrently_created_requests_all_verify_when_delivered_in_order()` — line 65
+- **function** `def test_verify_request_same_auth_concurrently_accepted_once(round_)` — line 78
+- **function** `def test_verify_response_same_auth_concurrently_accepted_once(round_)` — line 93
+
 ## `tests/client/test_wg_client_activator.py`
 
 - **variable** `DEFAULT_SOCKET` — line 12
@@ -483,6 +530,10 @@ Structural symbol index extracted mechanically from source files.
 - **function** `def run_js_checker() -> None` — line 51
 - **function** `def test_python_vector_matches_canonical_vector()` — line 75
 - **function** `def test_javascript_implementation_matches_canonical_vector()` — line 90
+
+## `tests/frontend/test_secure_session_concurrency.test.mjs`
+
+- **function** `newSession` — line 25
 
 ## `tests/frontend/wg_secure_session_gen_vectors.py`
 
