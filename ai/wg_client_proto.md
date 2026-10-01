@@ -132,7 +132,7 @@
 
 ### `wg_client_activator.py:WGClientActivation.close` — socket.close@L12
 
-### `wg_client_activator.py:activate_client` — socket.<create socket.socket>@L46, socket.close@L68, socket.connect@L52, socket.makefile@L55, socket.sendall@L53
+### `wg_client_activator.py:activate_client` — socket.<create socket.socket>@L46, socket.close@L77, socket.connect@L52, socket.makefile@L55, socket.sendall@L53
 - via: json.dumps
 - costanti dirette: ',', ':', '\n', 'rb', 'utf-8'
 - esterni: socket.AF_UNIX, socket.SOCK_STREAM
