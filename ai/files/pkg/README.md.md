@@ -4,26 +4,66 @@
 
 - Path: `pkg/README.md`
 - Language: `markdown`
-- Lines: 16
-- SHA256: `2e1fc2bffc2bd0216bca2a161b4be5fda2b18fde3976321b1cd95f2ebf657420`
+- Lines: 56
+- SHA256: `32611737d321d7d0a70ee6769a975cf60cfdebbefc1d2d2179500ca070027299`
 
 ## Source
 
 ```markdown
-# Package staging roots
+# Debian packaging
 
-This directory contains the filesystem roots used to build the two Debian
-packages for wg_manager.
+Il packaging Debian usa debhelper e vive nella directory `debian/`.
 
-- `wg-manager-auth-client/`: authentication service, per-session client,
-  frontend and Apache integration. This package is installed on the web/auth
-  host.
-- `wg-manager-controller/`: privileged WireGuard controller. This package is
-  installed on the WireGuard host.
+Il source package `wg-manager` produce due binary package:
 
-Each package root follows the raw `dpkg-deb` layout. Package metadata lives in
-`DEBIAN/control`; runtime files will be added under `etc/`, `usr/` and
-`var/` as the production layout is finalized.
+- `wg-manager-auth-client`: autenticazione OPAQUE, client per-sessione,
+  frontend e integrazione Apache;
+- `wg-manager-controller`: controller WireGuard privilegiato.
 
-These directories are staging trees, not source-install locations.
+## Build
+
+Dalla root della repository:
+
+```bash
+dpkg-buildpackage -us -uc -b
+```
+
+I file `debian/*.install` sono i manifest autorevoli dei file installati.
+
+## Comportamento all'installazione
+
+I package:
+
+- creano gli utenti di sistema necessari;
+- creano le directory runtime/state;
+- installano configurazioni production sotto `/etc/wg-manager`;
+- non installano certificati o private key;
+- non abilitano e non avviano automaticamente i servizi.
+
+Questo permette di completare configurazione e PKI prima del primo start.
+
+## Tool installati
+
+`wg-manager-auth-client` installa:
+
+```text
+/usr/sbin/wg-manager-users
+/usr/sbin/wg-manager-check-auth-client
+```
+
+`wg-manager-controller` installa:
+
+```text
+/usr/sbin/wg-manager-check-controller
+```
+
+I checker sono read-only.
+
+## Documentazione production
+
+- [Deployment](../docs/deployment.md)
+- [Configuration reference](../docs/configuration.md)
+
+Le stesse guide vengono incluse sotto `/usr/share/doc/<package>/` nei
+binary package.
 ```
