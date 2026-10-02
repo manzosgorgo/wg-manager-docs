@@ -46,12 +46,13 @@ The protocol snapshots are generated independently for:
 - `src/wg_manager`
 
 # Documentazione Principale di wg_manager
+# wg_manager
+
 Backend modulare per autenticare utenti, creare sessioni applicative sicure e
 gestire peer WireGuard mantenendo separati autenticazione, autorizzazione e
 privilegi di rete.
 
-Lo stato descritto qui corrisponde all'implementazione corrente della branch
-`protocol-review`.
+Questo documento descrive l'implementazione corrente del progetto.
 
 ## Architettura
 

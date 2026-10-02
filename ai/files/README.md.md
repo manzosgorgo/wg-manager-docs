@@ -4,18 +4,19 @@
 
 - Path: `README.md`
 - Language: `markdown`
-- Lines: 356
-- SHA256: `f7d60f70c1e56ab7ed4b760cfbcf1a94973b563c9c531e77efb803d94fddf057`
+- Lines: 357
+- SHA256: `979e3ba1640127e7be133d584c198738484eb603fac7e62c01d494d79133d6e1`
 
 ## Source
 
 ```markdown
+# wg_manager
+
 Backend modulare per autenticare utenti, creare sessioni applicative sicure e
 gestire peer WireGuard mantenendo separati autenticazione, autorizzazione e
 privilegi di rete.
 
-Lo stato descritto qui corrisponde all'implementazione corrente della branch
-`protocol-review`.
+Questo documento descrive l'implementazione corrente del progetto.
 
 ## Architettura
 
