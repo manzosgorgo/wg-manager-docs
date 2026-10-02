@@ -4,8 +4,8 @@
 
 - Path: `tests/e2e/test_js_user_lifecycle.mjs`
 - Language: `javascript`
-- Lines: 293
-- SHA256: `9d91edbfcb670322bf67aca756fc40ae0e23107e82a6d6ed98395e618934c3af`
+- Lines: 300
+- SHA256: `41d9df866124692ad296dff49084b91598cdca7808baf4ae039a150bf3765a5f`
 - Imports:
   - `../../src/wg_frontend/wg_secure_session.js`
   - `node:assert/strict`
@@ -231,6 +231,7 @@ async function main() {
 
   const authClient = new WGAuthHTTPClient(authUrl);
   let authenticated = false;
+  let session = null;
 
   try {
     console.log("[1/5] create temporary user");
@@ -258,7 +259,7 @@ async function main() {
     authenticated = true;
 
     console.log("[3/5] access wg-client with new account");
-    const session = await WGSecureSession.create(
+    session = await WGSecureSession.create(
       secureSessionConfig(clientConfig),
       hexToBytes(credentials.sessionKey),
       hexToBytes(finish.data.session_id),
@@ -277,7 +278,13 @@ async function main() {
     assert.deepEqual(status.data?.peers, []);
 
     console.log("[4/5] logout temporary user");
-    const logout = await authClient.logout();
+    const logout = await secureRequest(
+      session,
+      "/postauth",
+      9444,
+      "DELETE",
+      "/v1/session",
+    );
     assert.equal(logout.status, 200, JSON.stringify(logout.data));
     authenticated = false;
     await waitForLoggedOut(authClient);

@@ -4,9 +4,10 @@
 
 - Path: `src/wg_client/wg_peer_service.py`
 - Language: `python`
-- Lines: 251
-- SHA256: `9ddb7c6de67e9656b0614ba5b7223b3bd9a403264e7cf17ab60be15ae1c3cb75`
+- Lines: 301
+- SHA256: `a1495401b8c6bf8a383493460b24d4af39a9fc5a5524bc2ea887f1cf4867b087`
 - Imports:
+  - `ipaddress`
   - `logging`
   - `src.wg_client.wg_client_errors`
 
@@ -15,6 +16,7 @@
 ```python
 #!/usr/bin/env python3
 
+import ipaddress
 import logging
 
 from src.wg_client.wg_client_errors import (
@@ -30,7 +32,7 @@ log = logging.getLogger("wg_manager.peer_service")
 class WGPeerService:
     """Authorization and consistency boundary for peer operations."""
 
-    def __init__(self, controller, session, lifecycle, interface):
+    def __init__(self, controller, session, lifecycle, interface, endpoint=None):
         if session is None:
             raise RuntimeError("WGPeerService requires a secure session")
 
@@ -41,6 +43,7 @@ class WGPeerService:
         self.session = session
         self.lifecycle = lifecycle
         self.interface = interface
+        self.endpoint = endpoint
 
     @property
     def ipc(self):
@@ -92,6 +95,54 @@ class WGPeerService:
         ]
 
         return filtered
+
+    def provisioning(self):
+        try:
+            controller = self.controller.provisioning()
+        except WGControllerError as exc:
+            raise WGPeerError(exc.status, exc.message) from exc
+
+        if not isinstance(controller, dict):
+            raise WGPeerError(502, "controller returned invalid provisioning state")
+
+        try:
+            registry = self.ipc.provisioning_state()
+        except WGPeerPersistenceError as exc:
+            raise WGPeerError(exc.status, exc.message) from exc
+        except WGProtocolError as exc:
+            raise WGPeerError(502, "failed to read provisioning state") from exc
+
+        try:
+            network = ipaddress.ip_network(
+                controller["vpn_network"],
+                strict=False,
+            )
+        except (KeyError, ValueError, TypeError) as exc:
+            raise WGPeerError(502, "controller returned invalid VPN network") from exc
+
+        occupied = set(controller.get("used_ips", []))
+        if isinstance(registry, dict):
+            occupied.update(registry.get("reserved_ips", []))
+
+        server_address = controller.get("server_address")
+        if server_address:
+            try:
+                occupied.add(str(ipaddress.ip_interface(server_address)))
+            except ValueError as exc:
+                raise WGPeerError(502, "controller returned invalid server address") from exc
+
+        available = []
+        prefix = network.max_prefixlen
+        for host in network.hosts():
+            candidate = f"{host}/{prefix}"
+            if candidate not in occupied:
+                available.append(candidate)
+
+        result = dict(controller)
+        result["endpoint"] = self.endpoint
+        result["reserved_ips"] = sorted(occupied)
+        result["available_ips"] = available
+        return result
 
     def add_peer(self, public_key, allowed_ip):
         current = self._controller_status()

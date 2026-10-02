@@ -16,8 +16,9 @@
 <td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
     
 <tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
-<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="logging.html">logging</a><br>
-</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="ipaddress.html">ipaddress</a><br>
+</td><td class="multicolumn"><a href="logging.html">logging</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
 <table class="section">
 <tr class="decor index-decor heading-text">
 <td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
@@ -37,12 +38,12 @@
 <td class="section-title" colspan=3>&nbsp;<br><a name="WGPeerService">class <strong>WGPeerService</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
     
 <tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
-<td class="decor title-decor" colspan=2><span class="code"><a href="#WGPeerService">WGPeerService</a>(controller,&nbsp;session,&nbsp;lifecycle,&nbsp;interface)<br>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#WGPeerService">WGPeerService</a>(controller,&nbsp;session,&nbsp;lifecycle,&nbsp;interface,&nbsp;endpoint=None)<br>
 &nbsp;<br>
 Authorization&nbsp;and&nbsp;consistency&nbsp;boundary&nbsp;for&nbsp;peer&nbsp;operations.<br>&nbsp;</span></td></tr>
 <tr><td>&nbsp;</td>
 <td class="singlecolumn">Methods defined here:<br>
-<dl><dt><a name="WGPeerService-__init__"><strong>__init__</strong></a>(self, controller, session, lifecycle, interface)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+<dl><dt><a name="WGPeerService-__init__"><strong>__init__</strong></a>(self, controller, session, lifecycle, interface, endpoint=None)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
 
 <dl><dt><a name="WGPeerService-add_peer"><strong>add_peer</strong></a>(self, public_key, allowed_ip)</dt></dl>
 
@@ -51,6 +52,8 @@ Authorization&nbsp;and&nbsp;consistency&nbsp;boundary&nbsp;for&nbsp;peer&nbsp;op
 <dl><dt><a name="WGPeerService-create_user"><strong>create_user</strong></a>(self, username, password)</dt></dl>
 
 <dl><dt><a name="WGPeerService-delete_user"><strong>delete_user</strong></a>(self, username)</dt></dl>
+
+<dl><dt><a name="WGPeerService-provisioning"><strong>provisioning</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="WGPeerService-reassign_owner"><strong>reassign_owner</strong></a>(self, public_key, username)</dt></dl>
 

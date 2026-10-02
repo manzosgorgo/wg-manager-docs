@@ -70,14 +70,14 @@ The&nbsp;result&nbsp;is&nbsp;still&nbsp;percent-encoded,&nbsp;and&nbsp;does&nbsp
 query&nbsp;string:&nbsp;use&nbsp;this&nbsp;for&nbsp;routing&nbsp;decisions&nbsp;only.&nbsp;For&nbsp;secure<br>
 session&nbsp;authentication&nbsp;use&nbsp;<a href="#WGClientAPIHandler-api_target">api_target</a>()&nbsp;instead.</span></dd></dl>
 
-<dl><dt><a name="WGClientAPIHandler-api_target"><strong>api_target</strong></a>(self)</dt><dd><span class="code">Return&nbsp;the&nbsp;request&nbsp;target&nbsp;relative&nbsp;to&nbsp;listen_path,&nbsp;including<br>
-the&nbsp;query&nbsp;string&nbsp;if&nbsp;present,&nbsp;or&nbsp;None&nbsp;if&nbsp;the&nbsp;request&nbsp;is&nbsp;outside<br>
-listen_path.<br>
+<dl><dt><a name="WGClientAPIHandler-api_target"><strong>api_target</strong></a>(self)</dt><dd><span class="code">Return&nbsp;the&nbsp;canonical&nbsp;request&nbsp;target&nbsp;authenticated&nbsp;by<br>
+WGSecureSession.<br>
 &nbsp;<br>
-This&nbsp;is&nbsp;the&nbsp;exact&nbsp;string&nbsp;that&nbsp;must&nbsp;be&nbsp;authenticated:&nbsp;the&nbsp;query<br>
-string&nbsp;can&nbsp;carry&nbsp;application-level&nbsp;meaning,&nbsp;so&nbsp;it&nbsp;has&nbsp;to&nbsp;be<br>
-part&nbsp;of&nbsp;what&nbsp;create_request_auth()/verify_request()&nbsp;sign,&nbsp;even<br>
-though&nbsp;routing&nbsp;(<a href="#WGClientAPIHandler-api_path">api_path</a>())&nbsp;ignores&nbsp;it.</span></dd></dl>
+Reverse&nbsp;proxies&nbsp;are&nbsp;allowed&nbsp;to&nbsp;normalize&nbsp;percent-encoding&nbsp;in&nbsp;the<br>
+request&nbsp;path&nbsp;(for&nbsp;example&nbsp;"%3D"&nbsp;-&gt;&nbsp;"=").&nbsp;Dynamic&nbsp;path&nbsp;components<br>
+are&nbsp;therefore&nbsp;decoded&nbsp;and&nbsp;re-encoded&nbsp;here&nbsp;before&nbsp;MAC&nbsp;verification,<br>
+so&nbsp;direct&nbsp;clients&nbsp;and&nbsp;proxied&nbsp;browser&nbsp;requests&nbsp;authenticate&nbsp;the<br>
+same&nbsp;logical&nbsp;target.</span></dd></dl>
 
 <dl><dt><a name="WGClientAPIHandler-authenticate_request"><strong>authenticate_request</strong></a>(self, body)</dt><dd><span class="code">Authenticate&nbsp;the&nbsp;current&nbsp;request&nbsp;against&nbsp;self.<strong>session</strong>,&nbsp;using<br>
 self.<strong>command</strong>&nbsp;as&nbsp;the&nbsp;HTTP&nbsp;method&nbsp;and&nbsp;<a href="#WGClientAPIHandler-api_target">api_target</a>()&nbsp;(relative&nbsp;to<br>
@@ -274,7 +274,8 @@ Data descriptors inherited from <a href="socketserver.html#BaseRequestHandler">s
 &nbsp;&nbsp;&nbsp;&nbsp;handler_class,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;peer_service,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;listen_path,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;session<br>
+&nbsp;&nbsp;&nbsp;&nbsp;session,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lifecycle<br>
 )<br>
 &nbsp;<br>
 <br>&nbsp;</span></td></tr>
@@ -296,7 +297,8 @@ Methods defined here:<br>
     handler_class,
     peer_service,
     listen_path,
-    session
+    session,
+    lifecycle
 )</dt><dd><span class="code">Constructor.&nbsp;&nbsp;May&nbsp;be&nbsp;extended,&nbsp;do&nbsp;not&nbsp;override.</span></dd></dl>
 
 <hr>
@@ -420,7 +422,10 @@ Data and other attributes inherited from <a href="socketserver.html#BaseServer">
 <strong>AUTH_MAC_HEADER</strong> = 'X-WG-MAC'<br>
 <strong>AUTH_NONCE_HEADER</strong> = 'X-WG-Nonce'<br>
 <strong>AUTH_SESSION_ID_HEADER</strong> = 'X-WG-Session-ID'<br>
+<strong>HEARTBEAT_PATH</strong> = '/v1/heartbeat'<br>
 <strong>MAX_BODY_SIZE</strong> = 65536<br>
 <strong>PEERS_PREFIX</strong> = '/v1/peers/'<br>
+<strong>PROVISIONING_PATH</strong> = '/v1/provisioning'<br>
+<strong>SESSION_PATH</strong> = '/v1/session'<br>
 <strong>log</strong> = &lt;Logger wg_manager.api.handler (WARNING)&gt;</td></tr></table>
 </body></html>

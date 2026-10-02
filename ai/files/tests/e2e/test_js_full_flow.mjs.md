@@ -4,8 +4,8 @@
 
 - Path: `tests/e2e/test_js_full_flow.mjs`
 - Language: `javascript`
-- Lines: 463
-- SHA256: `7f18e310bc01495bf17d3c18a22e119203ec736984fc3991595288663bdff794`
+- Lines: 475
+- SHA256: `f001366b3fa0a910cb1372ff74151534447c1e5c6d8a54571daad10dd13f387f`
 - Imports:
   - `../../src/wg_frontend/wg_secure_session.js`
   - `node:assert/strict`
@@ -442,7 +442,13 @@ async function main() {
 
     console.log("[10/10] logout");
 
-    const logout = await authClient.logout();
+    const logout = await secureRequest(
+      session,
+      listenPath,
+      clientPort,
+      "DELETE",
+      "/v1/session",
+    );
     assert.equal(logout.status, 200, JSON.stringify(logout.data));
     authenticated = false;
 
@@ -465,12 +471,18 @@ async function main() {
       }
     }
 
-    if (authenticated) {
+    if (authenticated && session) {
       try {
-        await authClient.logout();
+        await secureRequest(
+          session,
+          listenPath,
+          clientPort,
+          "DELETE",
+          "/v1/session",
+        );
         await waitForLoggedOut(authClient);
       } catch {
-        // Best-effort cleanup.
+        // Best-effort cleanup; idle timeout remains the final fallback.
       }
     }
 
