@@ -22,6 +22,13 @@ Automatically generated documentation for the `wg_manager` project.
 - [wg-manager protocol](ai/wg_manager_proto.md)
 - [wg-all protocol](ai/wg_all_proto.md)
 
+## Python API documentation
+
+- [pydoc API index](ai/pydoc/index.html)
+
+The Python API reference is generated from module/class/function docstrings
+with `tools/build_pydoc.py`.
+
 ## Source documentation
 
 The [`ai/files/`](ai/files/) directory contains generated documentation
