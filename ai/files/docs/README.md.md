@@ -5,7 +5,7 @@
 - Path: `docs/README.md`
 - Language: `markdown`
 - Lines: 398
-- SHA256: `7652883dc40d94ab7850eeaafc6b3b56c535c08959f0a5ffbf0289deea691b9a`
+- SHA256: `ca8108671eae821d3a9aa58d9500d091478916b9a9dff440622f08166cfa925a`
 
 ## Source
 
@@ -50,7 +50,7 @@ The protocol snapshots are generated independently for:
 - `src/wg_client`
 - `src/wg_manager`
 # Documentazione Principale
-    # wg_manager
+    ## wg_manager
 
 Backend modulare per autenticare utenti, creare sessioni applicative sicure e
 gestire peer WireGuard mantenendo separati autenticazione, autorizzazione e
