@@ -4,8 +4,8 @@
 
 - Path: `src/wg_auth/wg_auth_ownership_service.py`
 - Language: `python`
-- Lines: 67
-- SHA256: `ae53ffd4cf67148add901015d4b0ac2b2f0b553774a85b462d5d00298ff641d8`
+- Lines: 68
+- SHA256: `11f0f0980ac8fe46b1941e89f9000e1f4654ead0aa637873757acc4f4eecf475`
 
 ## Source
 
@@ -46,6 +46,7 @@ class WGAuthOwnershipService:
         return {
             "users": [u.username for u in self.user_store.list_users()],
             "peers": peers,
+            "ips": self.peer_registry.snapshot_ips(),
         }
 
     def reassign(self, public_key, target_username):

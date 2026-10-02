@@ -5,7 +5,7 @@
 - Path: `tests/client/test_secure_session_policy.py`
 - Language: `python`
 - Lines: 139
-- SHA256: `f94101138e555dc5707dd41e95342e05d529bc22b73277065ec994fc6f7103c7`
+- SHA256: `4a941014c2b28fff5e9c4336e94226b4ab1376cbbb99398ef0769ae7c789b57b`
 - Imports:
   - `pytest`
   - `src.wg_client.wg_client_errors`
@@ -27,7 +27,7 @@ from src.wg_client.wg_client_errors import (
 from src.wg_client.wg_secure_session import WGSecureSession
 
 
-K_SESSION = b"A" * 32
+K_SESSION = b"A" * 64
 SESSION_ID = b"B" * 16
 
 

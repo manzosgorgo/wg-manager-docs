@@ -4,8 +4,8 @@
 
 - Path: `tests/auth/test_peer_registry.py`
 - Language: `python`
-- Lines: 159
-- SHA256: `c99b89e0b69e71627b92d1955c8d1f75750506c1fe1c55ec622e6f53a08abce1`
+- Lines: 238
+- SHA256: `512f39c82c59b2f58636187733b5f9bae323e262e2d95706a79cc22a5c2e1498`
 - Imports:
   - `json`
   - `pytest`
@@ -173,4 +173,83 @@ def test_set_owner_repairs_orphan(tmp_path):
 
     assert updated["username"] == "alice"
     assert updated["ownership_state"] == "consistent"
+
+
+
+def test_reserve_updates_ip_registry(tmp_path):
+    peer_path = tmp_path / "peer-registry.json"
+    ip_path = tmp_path / "ip-registry.json"
+    registry = WGAuthPeerRegistry(
+        str(peer_path),
+        str(ip_path),
+    )
+
+    registry.reserve(
+        "alice",
+        "peer-a",
+        "10.8.0.2/32",
+    )
+
+    assert registry.snapshot_ips() == {
+        "10.8.0.2/32": {
+            "public_key": "peer-a",
+            "username": "alice",
+            "ownership_state": "consistent",
+        }
+    }
+
+    registry.release("alice", "peer-a")
+
+    assert registry.snapshot_ips() == {}
+
+
+def test_reconcile_rebuilds_ip_registry(tmp_path):
+    registry = WGAuthPeerRegistry(
+        str(tmp_path / "peer-registry.json"),
+        str(tmp_path / "ip-registry.json"),
+    )
+
+    registry.reconcile(
+        [
+            {
+                "public_key": "peer-a",
+                "allowed_ip": "10.8.0.2/32",
+            }
+        ],
+        {"peer-a": "alice"},
+    )
+
+    assert registry.snapshot_ips() == {
+        "10.8.0.2/32": {
+            "public_key": "peer-a",
+            "username": "alice",
+            "ownership_state": "consistent",
+        }
+    }
+
+
+
+def test_set_owner_updates_ip_registry(tmp_path):
+    registry = WGAuthPeerRegistry(
+        str(tmp_path / "peer-registry.json"),
+        str(tmp_path / "ip-registry.json"),
+    )
+
+    registry.reconcile(
+        [
+            {
+                "public_key": "peer-a",
+                "allowed_ip": "10.8.0.2/32",
+            }
+        ],
+        {},
+    )
+
+    registry.set_owner("peer-a", "alice")
+
+    assert registry.snapshot_ips()["10.8.0.2/32"] == {
+        "public_key": "peer-a",
+        "username": "alice",
+        "ownership_state": "consistent",
+    }
 ```

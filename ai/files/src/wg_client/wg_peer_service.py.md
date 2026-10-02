@@ -4,8 +4,8 @@
 
 - Path: `src/wg_client/wg_peer_service.py`
 - Language: `python`
-- Lines: 228
-- SHA256: `ac3cc40ee66aeaf23deadb9678aa2f369e8076dc02fc33a4396e337c294980ba`
+- Lines: 251
+- SHA256: `9ddb7c6de67e9656b0614ba5b7223b3bd9a403264e7cf17ab60be15ae1c3cb75`
 - Imports:
   - `logging`
   - `src.wg_client.wg_client_errors`
@@ -173,12 +173,7 @@ class WGPeerService:
 
         try:
             self.ipc.unregister_peer(public_key)
-        except WGPeerPersistenceError as exc:
-            raise WGPeerError(
-                exc.status,
-                exc.message,
-            ) from exc
-        except WGProtocolError as exc:
+        except (WGPeerPersistenceError, WGProtocolError) as exc:
             log.error(
                 "peer removed but ownership cleanup failed: %s",
                 exc,
@@ -226,6 +221,7 @@ class WGPeerService:
             "ok": True,
             "users": ownership.get("users", []),
             "peers": rows,
+            "ips": ownership.get("ips", {}),
         }
 
     def reassign_owner(self, public_key, username):
@@ -241,4 +237,31 @@ class WGPeerService:
             raise WGPeerError(exc.status, exc.message) from exc
         except WGProtocolError as exc:
             raise WGPeerError(502, "failed to update peer ownership") from exc
+
+
+    def create_user(self, username, password):
+        if not self.session.is_admin:
+            raise WGPeerError(403, "admin principal required")
+
+        try:
+            return self.ipc.create_user(username, password)
+        except WGPeerPersistenceError as exc:
+            raise WGPeerError(exc.status, exc.message) from exc
+        except WGProtocolError as exc:
+            raise WGPeerError(502, "failed to create account") from exc
+
+    def delete_user(self, username):
+        if not self.session.is_admin:
+            raise WGPeerError(403, "admin principal required")
+
+        current = self.session.principal.get("username")
+        if username == current:
+            raise WGPeerError(409, "cannot delete active admin account")
+
+        try:
+            return self.ipc.delete_user(username)
+        except WGPeerPersistenceError as exc:
+            raise WGPeerError(exc.status, exc.message) from exc
+        except WGProtocolError as exc:
+            raise WGPeerError(502, "failed to delete account") from exc
 ```

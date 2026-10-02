@@ -4,9 +4,10 @@
 
 - Path: `tests/auth/test_ownership_service.py`
 - Language: `python`
-- Lines: 91
-- SHA256: `6d972a4213c1c7d877741e4c63fb81f2837925d107449c37956ce046d12e5b19`
+- Lines: 137
+- SHA256: `9f3ca51b448b5ef5614fabbd48b4703d6c76c8d644d457391967ccc9948e1340`
 - Imports:
+  - `pytest`
   - `src.wg_auth.wg_auth_ownership_service`
   - `src.wg_auth.wg_auth_peer_registry`
   - `src.wg_auth.wg_auth_user_store`
@@ -15,6 +16,8 @@
 
 ```python
 #!/usr/bin/env python3
+
+import pytest
 
 from src.wg_auth.wg_auth_ownership_service import WGAuthOwnershipService
 from src.wg_auth.wg_auth_peer_registry import WGAuthPeerRegistry
@@ -105,4 +108,48 @@ def test_reassign_moves_peer_between_users(tmp_path):
     assert store.load("alice").peers == ()
     assert store.load("bob").peers == ("peer-a",)
     assert registry.get("peer-a")["username"] == "bob"
+
+
+
+def test_reassign_rejects_missing_target_user(tmp_path):
+    store, registry, service = make_service(tmp_path)
+
+    registry.reconcile(
+        [
+            {
+                "public_key": "peer-a",
+                "allowed_ip": "10.8.0.2/32",
+            }
+        ],
+        {},
+    )
+
+    with pytest.raises(FileNotFoundError):
+        service.reassign("peer-a", "missing-user")
+
+    assert registry.get("peer-a")["username"] is None
+
+
+def test_admin_state_exposes_ip_registry(tmp_path):
+    store, registry, service = make_service(tmp_path)
+
+    store.create_user("alice", b"A" * 256)
+    store.add_peer("alice", "peer-a")
+    registry.reconcile(
+        [
+            {
+                "public_key": "peer-a",
+                "allowed_ip": "10.8.0.2/32",
+            }
+        ],
+        store.peer_owners(),
+    )
+
+    state = service.admin_state()
+
+    assert state["ips"]["10.8.0.2/32"] == {
+        "public_key": "peer-a",
+        "username": "alice",
+        "ownership_state": "consistent",
+    }
 ```
