@@ -4,8 +4,8 @@
 
 - Path: `tests/e2e/test_js_full_flow.mjs`
 - Language: `javascript`
-- Lines: 385
-- SHA256: `b467d748eda4b21522ff9928793dc619f2d9834954301a08bc87ac61c22f380e`
+- Lines: 452
+- SHA256: `e72ae54b65efb0f11368e3c385a9415d462a2c772b6439f6f9ad06f320dc3d47`
 - Imports:
   - `../../src/wg_frontend/wg_secure_session.js`
   - `../auth/js/opaque_client.js`
@@ -54,6 +54,8 @@ const CLIENT_CONF = path.join(ROOT, "config/wg-client-test-auth.conf");
 
 const CERT = path.join(ROOT, "cert/client.crt");
 const KEY = path.join(ROOT, "cert/client.key");
+const LOGIN_DIR = path.join(ROOT, "login");
+const PEER_REGISTRY = path.join(LOGIN_DIR, ".peer_registry.json");
 
 function parseIni(filename) {
   const config = {};
@@ -188,8 +190,21 @@ async function secureRequest(session, listenPath, port, method, apiPath, object 
   return { status: response.status, data };
 }
 
-function findFreeIp(status) {
-  const used = new Set();
+function userPeers(username) {
+  const filename = path.join(LOGIN_DIR, username);
+  const record = JSON.parse(fs.readFileSync(filename, "utf8"));
+  assert.ok(Array.isArray(record.peers), "user record peers must be an array");
+  return record.peers;
+}
+
+function registryEntry(publicKey) {
+  if (!fs.existsSync(PEER_REGISTRY)) return null;
+  const registry = JSON.parse(fs.readFileSync(PEER_REGISTRY, "utf8"));
+  return registry.peers?.[publicKey] ?? null;
+}
+
+function findFreeIp(status, extraUsed = []) {
+  const used = new Set(extraUsed);
 
   for (const peer of status.peers ?? []) {
     for (const allowed of peer.allowed_ips ?? []) {
@@ -243,7 +258,7 @@ async function main() {
       );
     }
 
-    console.log("[1/8] OPAQUE authentication");
+    console.log("[1/10] OPAQUE authentication");
 
     const opaque = new OpaqueClient(username, password);
     const startRequest = await opaque.start();
@@ -272,7 +287,7 @@ async function main() {
     );
     assert.equal(credentials.sessionKey.length, 128, "OPAQUE K_session must be 64 bytes");
 
-    console.log("[2/8] client/server K_session match");
+    console.log("[2/10] client/server K_session match");
 
     session = await WGSecureSession.create(
       secureSessionConfig(clientConfig),
@@ -280,7 +295,7 @@ async function main() {
       hexToBytes(finish.data.session_id),
     );
 
-    console.log("[3/8] authenticated GET /v1/status");
+    console.log("[3/10] authenticated GET /v1/status");
 
     const initial = await secureRequest(
       session,
@@ -299,7 +314,7 @@ async function main() {
     createdPeer = publicKey;
     const peerPath = "/v1/peers/" + encodeURIComponent(publicKey);
 
-    console.log(`[4/8] PUT peer ${publicKey} -> ${allowedIp}`);
+    console.log(`[4/10] PUT peer ${publicKey} -> ${allowedIp}`);
 
     const added = await secureRequest(
       session,
@@ -316,8 +331,51 @@ async function main() {
     assert.equal(added.status, 200, JSON.stringify(added.data));
     assert.equal(added.data?.ok, true);
     assert.equal(added.data?.public_key, publicKey);
+    assert.ok(
+      userPeers(username).includes(publicKey),
+      "new peer ownership was not persisted",
+    );
+    assert.deepEqual(
+      registryEntry(publicKey),
+      {
+        username,
+        allowed_ip: allowedIp,
+        ownership_state: "consistent",
+      },
+      "peer reservation was not persisted",
+    );
 
-    console.log("[5/8] GET verifies peer exists");
+    console.log("[5/10] duplicate IP is rejected before manager");
+    const duplicateIpKey = crypto.randomBytes(32).toString("base64");
+    const duplicateIp = await secureRequest(
+      session,
+      listenPath,
+      clientPort,
+      "PUT",
+      "/v1/peers/" + encodeURIComponent(duplicateIpKey),
+      {
+        public_key: duplicateIpKey,
+        allowed_ip: allowedIp,
+      },
+    );
+    assert.equal(duplicateIp.status, 409, JSON.stringify(duplicateIp.data));
+
+    console.log("[6/10] duplicate key is rejected before manager");
+    const alternateIp = findFreeIp(initial.data, [allowedIp]);
+    const duplicateKey = await secureRequest(
+      session,
+      listenPath,
+      clientPort,
+      "PUT",
+      peerPath,
+      {
+        public_key: publicKey,
+        allowed_ip: alternateIp,
+      },
+    );
+    assert.equal(duplicateKey.status, 409, JSON.stringify(duplicateKey.data));
+
+    console.log("[7/10] GET verifies peer exists");
 
     const afterAdd = await secureRequest(
       session,
@@ -333,7 +391,7 @@ async function main() {
       "new peer is missing from status",
     );
 
-    console.log("[6/8] DELETE peer");
+    console.log("[8/10] DELETE peer");
 
     const removed = await secureRequest(
       session,
@@ -345,10 +403,19 @@ async function main() {
 
     assert.equal(removed.status, 200, JSON.stringify(removed.data));
     assert.equal(removed.data?.ok, true);
+    assert.ok(
+      !userPeers(username).includes(publicKey),
+      "deleted peer ownership is still persisted",
+    );
+    assert.equal(
+      registryEntry(publicKey),
+      null,
+      "deleted peer reservation is still persisted",
+    );
 
     createdPeer = null;
 
-    console.log("[7/8] GET verifies peer disappeared");
+    console.log("[9/10] GET verifies peer disappeared");
 
     const afterDelete = await secureRequest(
       session,
@@ -364,7 +431,7 @@ async function main() {
       "deleted peer is still visible",
     );
 
-    console.log("[8/8] logout");
+    console.log("[10/10] logout");
 
     const logout = await authClient.logout();
     assert.equal(logout.status, 200, JSON.stringify(logout.data));
